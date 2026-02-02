@@ -1,0 +1,135 @@
+﻿<Window x:Class="Nmea2000Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Nmea2000Viewer"
+        mc:Ignorable="d"
+        Title="NMEA 2000 Viewer" Height="450" Width="800">
+    <Window.DataContext>
+        <local:N2kData/>
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Name="btnConnect" Content="Connect to PCAN-USB" Click="btnConnect_Click" Padding="10,5"/>
+            <Button Name="btnDisconnect" Content="Disconnect" Click="btnDisconnect_Click" Margin="10,0,0,0" Padding="10,5" IsEnabled="False"/>
+            <Button Name="btnResetCounters" Content="Reset Counters" Click="btnResetCounters_Click" Margin="20,0,0,0" Padding="10,5"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Navigation Panel -->
+            <GroupBox Header="Navigation (PGN 129029)" Grid.Row="0" Grid.Column="0" Margin="5">
+                <StackPanel>
+                    <Label Content="Latitude:"/>
+                    <TextBlock Text="{Binding Latitude, StringFormat={}{0:F7} deg}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="Longitude:"/>
+                    <TextBlock Text="{Binding Longitude, StringFormat={}{0:F7} deg}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Packets: "/>
+                        <TextBlock Text="{Binding CountPGN129029}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Motion Panel -->
+            <GroupBox Header="Motion (PGN 129026)" Grid.Row="0" Grid.Column="1" Margin="5">
+                <StackPanel>
+                    <Label Content="SOG (Speed Over Ground):"/>
+                    <TextBlock Text="{Binding SOG, StringFormat={}{0:F2} m/s}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="COG (Course Over Ground):"/>
+                    <TextBlock Text="{Binding COG, StringFormat={}{0:F2} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Packets: "/>
+                        <TextBlock Text="{Binding CountPGN129026}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Attitude Panel -->
+            <GroupBox Header="Attitude (PGN 127257)" Grid.Row="1" Grid.Column="0" Margin="5">
+                <StackPanel>
+                    <Label Content="Yaw:"/>
+                    <TextBlock Text="{Binding Yaw, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="Pitch:"/>
+                    <TextBlock Text="{Binding Pitch, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="Roll:"/>
+                    <TextBlock Text="{Binding Roll, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Packets: "/>
+                        <TextBlock Text="{Binding CountPGN127257}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Heading Panel -->
+            <GroupBox Header="Heading (PGN 127250)" Grid.Row="1" Grid.Column="1" Margin="5">
+                <StackPanel>
+                    <Label Content="Heading:"/>
+                    <TextBlock Text="{Binding Heading, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="Deviation:"/>
+                    <TextBlock Text="{Binding Deviation, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <Label Content="Variation:"/>
+                    <TextBlock Text="{Binding Variation, StringFormat={}{0:F4} rad}" FontSize="16" FontWeight="Bold" Margin="5,0"/>
+                    <Separator Margin="0,10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Packets: "/>
+                        <TextBlock Text="{Binding CountPGN127250}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            
+            <!-- Satellites Panel -->
+            <GroupBox Header="Satellites (PGN 129540)" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Grid.Row="0" ItemsSource="{Binding Satellites}" AutoGenerateColumns="False" Height="150" Margin="0,0,0,5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="PRN" Binding="{Binding PRN}" Width="50"/>
+                            <DataGridTextColumn Header="Elev (deg)" Binding="{Binding Elevation, StringFormat={}{0:F1}}" Width="80"/>
+                            <DataGridTextColumn Header="Azi (deg)" Binding="{Binding Azimuth, StringFormat={}{0:F1}}" Width="80"/>
+                            <DataGridTextColumn Header="SNR (dB)" Binding="{Binding SNR, StringFormat={}{0:F2}}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <Label Content="Packets: "/>
+                        <TextBlock Text="{Binding CountPGN129540}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
