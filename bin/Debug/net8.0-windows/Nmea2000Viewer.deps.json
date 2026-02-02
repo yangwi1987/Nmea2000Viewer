@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Nmea2000Viewer/1.0.0": {
+        "runtime": {
+          "Nmea2000Viewer.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Nmea2000Viewer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
